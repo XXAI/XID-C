@@ -1,0 +1,134 @@
+<section class="signup">
+  <div class="mat-typography">
+    <h1 class="headline" style="text-align:center">Registro</h1>
+  </div>
+  <mat-horizontal-stepper [linear]="true" #stepper>
+    <mat-step [stepControl]="userFormGroup">
+      <form [formGroup]="userFormGroup">
+        <ng-template matStepLabel>Usuario</ng-template>
+        <section fxLayout="column">
+          <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
+            <mat-form-field fxFlex>
+              <input type="text" matInput placeholder="Nombre" formControlName="nombre">
+              <mat-error>El nombre es obligatorio</mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+              <input type="text" matInput placeholder="Apellido paterno" formControlName="apellido_paterno">
+              <mat-error>El apellido paterno es obligatorio</mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+              <input type="text" matInput placeholder="Apellido materno" formControlName="apellido_materno">
+              <mat-error>Error</mat-error>
+            </mat-form-field>
+          </div>
+          <mat-form-field>
+            <input type="email" matInput placeholder="Tu email" formControlName="email">
+            <mat-error>El email es inválido</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input type="password" matInput placeholder="Tu contraseña" formControlName="password">
+            <mat-error>La contraseña es requerida.</mat-error>
+          </mat-form-field>
+          <div fxLayout fxLayoutAlign="end">
+            <button mat-button matStepperNext>Siguiente</button>
+          </div>
+        </section>
+
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="addressFormGroup">
+      <form [formGroup]="addressFormGroup">
+        <ng-template matStepLabel>Domicilio</ng-template>
+        <section fxLayout="column">
+          <div class="mat-typography">
+            <br>
+            <p>Algunos servicios en línea del Instituto de Salud del Estado de Chiapas necesitan que la cuenta de Salud ID esté
+              verificada para confiar en la identidad del usuario. Los datos siguientes no son obligatorios, pero una vez creada
+              la cuenta es recomendable iniciar el proceso de verificación.</p>
+            <br>
+          </div>
+          <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
+            <mat-form-field fxFlex>
+              <input type="text" matInput placeholder="Calle / Avenida" formControlName="calle">
+              <mat-error>El campo es obligatorio</mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex="15">
+              <input type="text" matInput placeholder="# Ext." formControlName="numero_exterior">
+              <mat-error>El campo es obligatorio</mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex="15">
+              <input type="text" matInput placeholder="# Int." formControlName="numero_interior">
+              <mat-error>El campo es obligatorio</mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
+            <mat-form-field fxFlex>
+              <input type="text" matInput placeholder="Colonia" formControlName="colonia">
+              <mat-error>El campo es obligatorio</mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex="15">
+              <input type="text" matInput placeholder="C.P." formControlName="codigo_postal">
+              <mat-error>El campo es obligatorio</mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
+            <mat-form-field fxFlex>
+              <input type="text" matInput placeholder="País" formControlName="pais">
+              <mat-error>El campo es obligatorio</mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+              <input type="text" matInput placeholder="Estado" formControlName="estado">
+              <mat-error>El campo es obligatorio</mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+              <input type="text" matInput placeholder="Municipio" formControlName="municipio">
+              <mat-error>El campo es obligatorio</mat-error>
+            </mat-form-field>
+          </div>
+          <div fxLayout>
+            <button mat-button matStepperPrevious>Atrás</button>
+            <div fxFlex></div>
+            <button mat-button matStepperNext>Siguiente</button>
+          </div>
+        </section>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="identityFormGroup"  >
+      <form [formGroup]="identityFormGroup">
+        <ng-template matStepLabel>Identidad</ng-template>
+        <section fxLayout="column">
+          <div class="mat-typography">   
+            <br> 
+            <p>Algunos servicios en línea del Instituto de Salud del Estado de Chiapas necesitan que la cuenta de Salud ID esté verificada para confiar en la identidad del usuario. Los datos siguientes no son obligatorios, pero una vez creada la cuenta es recomendable iniciar el proceso de verificación.</p>
+            <br>
+          </div>
+          <div><strong>Nacionalidad:</strong></div>
+          <mat-radio-group formControlName="nacionalidad">
+            <mat-radio-button value="M">Mexicana</mat-radio-button>
+            <mat-radio-button value="E">Extranjera</mat-radio-button>
+          </mat-radio-group>
+          <mat-form-field>
+            <input type="text" matInput placeholder="CURP" formControlName="curp">
+            <mat-error>El campo es obligatorio</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input type="text" matInput placeholder="R.F.C." formControlName="rfc">
+            <mat-error>El campo es obligatorio</mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input type="text" matInput placeholder="Clave elector (INE)" formControlName="ine">
+            <mat-error>El campo es obligatorio</mat-error>
+          </mat-form-field>
+          <mat-checkbox formControlName="informacion_veridica">Manifiesto que la información presentada es verídica.</mat-checkbox>
+          <mat-checkbox formControlName="acepto">Acepto los términos y condiciones de uso.</mat-checkbox>
+          <br>
+          <div fxLayout>
+              <button mat-button matStepperPrevious>Atrás</button>
+              <div fxFlex></div>
+              <button mat-raised-button color="accent" (click)="onSubmit()" [disabled]="userFormGroup.invalid || addressFormGroup.invalid || identityFormGroup.invalid">Finalizar</button>
+            </div>
+        </section>
+      </form>
+    </mat-step>
+  </mat-horizontal-stepper>
+</section>
