@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppState, selectAuthState } from 'src/app/app.states';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { SignUp } from '../store/auth.actions';
+import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+
+
+
 import { SharedService } from 'src/app/shared/shared.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-signup',
@@ -12,17 +14,12 @@ import { SharedService } from 'src/app/shared/shared.service';
   styleUrls: ['./signup.component.css']
 })
 export class SignupComponent implements OnInit {
-  getState:Observable<any>;
+  isLoading:boolean = false;
   userFormGroup: FormGroup;
   addressFormGroup: FormGroup;
   identityFormGroup: FormGroup;
 
-  constructor(
-    private store: Store<AppState>,
-    private sharedService: SharedService
-  ) {
-    this.getState = this.store.select(selectAuthState);
-  }
+  constructor(private router: Router, private sharedService: SharedService, private authService: AuthService ) { }
 
   ngOnInit() {
     this.userFormGroup = new FormGroup({
@@ -30,7 +27,10 @@ export class SignupComponent implements OnInit {
       apellido_paterno: new FormControl('',{ validators: [Validators.required] }),
       apellido_materno: new FormControl('',{ }),
       email: new FormControl('',{ validators: [Validators.required, Validators.email] }),
-      password: new FormControl('', { validators: [Validators.required] })
+      password: new FormControl('', { validators: [Validators.required]}),
+      password_confirmation: new FormControl('', { validators: [Validators.required, this.validatorPasswordConfirmation] })
+    },{
+      validators: [ this.passwordConfirmation]
     });
 
     this.addressFormGroup = new FormGroup({
@@ -54,17 +54,26 @@ export class SignupComponent implements OnInit {
       acepto: new FormControl(false, { validators: [Validators.pattern('true')] })
     });
 
-    this.getState.subscribe((state) => {
-      if(state.errorMessage){
-        this.sharedService.showSnackBar(state.errorMessage, null, 3000);
-      }
-    })
+  }
+  
+  passwordConfirmation(c: AbstractControl): { [key:string]: boolean } {
+    if (c.get('password').value !== c.get('password_confirmation').value) {
+      console.log("pendejo")
+        return {"not_confirmed": true};
+    }
+  }
+  validatorPasswordConfirmation(control: AbstractControl): { [key:string]: boolean } {
+    if(control.value !== undefined && control.value !=  ""){
+      return {"not_confirmed": true}
+    }
+    return null;
   }
 
   onSubmit(): void {
     const payload = {
       email: this.userFormGroup.value.email,
       password: this.userFormGroup.value.password,
+      password_confirmation: this.userFormGroup.value.password,
       nombre: this.userFormGroup.value.nombre,
       apellido_paterno: this.userFormGroup.value.apellido_paterno,
       apellido_materno: this.userFormGroup.value.apellido_materno,
@@ -79,10 +88,31 @@ export class SignupComponent implements OnInit {
       nacionalidad: this.identityFormGroup.value.nacionalidad,
       curp: this.identityFormGroup.value.curp,
       rfc: this.identityFormGroup.value.rfc,
-      ine: this.identityFormGroup.value.ine
+      ine: this.identityFormGroup.value.ine,
+      acepto: this.identityFormGroup.value.acepto,
+      informacion_veridica: this.identityFormGroup.value.informacion_veridica,
+      g_recaptcha_response:'03AMGVjXhPlqMqm4XYdQn-EryDJrZ_cUzcMB88bUhl6ivCncnPf2EOjEx1633tVQ_wU9zTbs0bH43bWHc7s6nH4LKTdXaDQSdV3gOUbf5Lcf8X32EKOueROybuXO1rVLMAjWDv6qCTIuaW8D4Ew3LLOWAOkZ_Gs2o7TTOJ_rQmZLTbB49JjR2KMtFmTMzA_8f4LatfsWkaoTYBrH25Ygyb50JHDq9MEGoxdA5WB1WTbve_u-9imfoMe0aufCxuQRyCPf0INFIHd5fMeqRFhdCdOphNu84uc-sgj4VFaWzDre8YdfKfw5ghYLZEV_MUow3wtJr-euto2cV_C-S_HUG_UokoIENxOuWlAg'
 
     }
-    this.store.dispatch(new SignUp(payload));
+    this.authService.signUp(payload).subscribe(
+      response => {
+        this.isLoading = false;
+        this.router.navigate(['/profile']);
+      }, error => {
+
+        console.log(error);
+        var errorMessage = "Error de validación, verifique los campos marcados en rojo";
+        if(error.status == 409){
+          this.userFormGroup.controls['email'].setErrors({'unique':true})
+          console.log(this.userFormGroup.controls['email'].errors);
+        } else {
+          errorMessage = "Ocurrió un error";
+        }
+        this.sharedService.showSnackBar(errorMessage, null, 3000);
+        this.isLoading = false;
+      }
+    )
+    //this.store.dispatch(new SignUp(payload));
   }
 
 }

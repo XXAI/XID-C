@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-
-import { AppState, selectAuthState } from 'src/app/app.states';
-import { LogIn } from '../store/auth.actions';
 import { SharedService } from 'src/app/shared/shared.service';
+import { AuthService } from '../auth.service';
+import { Router } from '@angular/router';
 
 
 
@@ -16,36 +14,35 @@ import { SharedService } from 'src/app/shared/shared.service';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
-  getState: Observable<any>;
-  
-  constructor(
-    private store: Store<AppState>,
-    private sharedService: SharedService
-  ) {
-    this.getState = this.store.select(selectAuthState);
-   }
+  isLoading:boolean = false;
+
+  constructor(private router: Router, private sharedService: SharedService, private authService: AuthService ) { }
 
   ngOnInit() {
     this.loginForm = new FormGroup({
       email: new FormControl('',{ validators: [Validators.required, Validators.email] }),
       password: new FormControl('', { validators: [Validators.required] })
     });
-
-    this.getState.subscribe((state) => {
-      if(state.errorMessage){
-        this.sharedService.showSnackBar(state.errorMessage, null, 3000);
-      }
-    });
   }
 
   onSubmit(){
-    const payload = {
-      email: this.loginForm.value.email,
-      password: this.loginForm.value.password
-    }
-    this.store.dispatch(new LogIn(payload));
-    //this.user =  this.loginForm.value as User;
-    //console.log(this.user);
+
+    this.isLoading = true;
+    this.authService.logIn(this.loginForm.value.email, this.loginForm.value.password ).subscribe(
+      response => {
+        this.isLoading = false;
+        this.router.navigate(['/profile']);
+      }, error => {
+
+        console.log(error);
+        var errorMessage = "Error: Credenciales inválidas";
+        if(error.status != 401){
+          errorMessage = "Ocurrió un error";
+        }
+        this.sharedService.showSnackBar(errorMessage, null, 3000);
+        this.isLoading = false;
+      }
+    );
   }
 
 }

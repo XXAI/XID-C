@@ -22,13 +22,21 @@
             </mat-form-field>
           </div>
           <mat-form-field>
-            <input type="email" matInput placeholder="Tu email" formControlName="email">
-            <mat-error>El email es inválido</mat-error>
+            <input type="email" matInput placeholder="Email" formControlName="email">
+            <mat-error *ngIf="userFormGroup.controls['email']?.errors?.required">El email es inválido</mat-error>
+            <mat-error *ngIf="userFormGroup.controls['email']?.errors?.unique">El email ya fue utilizado</mat-error>
           </mat-form-field>
-          <mat-form-field>
-            <input type="password" matInput placeholder="Tu contraseña" formControlName="password">
-            <mat-error>La contraseña es requerida.</mat-error>
-          </mat-form-field>
+          <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
+            <mat-form-field fxFlex>
+              <input type="password" matInput placeholder="Contraseña" formControlName="password">
+              <mat-error>La contraseña es requerida.</mat-error>
+            </mat-form-field>
+            <mat-form-field fxFlex>
+              <input type="password" matInput placeholder="Confirmar contraseña" formControlName="password_confirmation">              
+              <mat-error *ngIf="userFormGroup.controls['password_confirmation']?.errors?.required">Debes confirmar la contraseña</mat-error>
+            <mat-error *ngIf="userFormGroup.controls['password_confirmation']?.errors?.not_confirmed">Las contraseñas no coinciden</mat-error>
+            </mat-form-field>
+          </div>          
           <div fxLayout fxLayoutAlign="end">
             <button mat-button matStepperNext>Siguiente</button>
           </div>

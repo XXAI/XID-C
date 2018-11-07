@@ -2,10 +2,10 @@
 
     <form fxLayout fxLayoutAlign="center center" [formGroup]="loginForm" fxFlex="100" (ngSubmit)="onSubmit()">
       <mat-card fxFlex.xs="100%" fxFlex="400px">
-        <mat-card-title fxLayoutAlign="center">Bienvenido</mat-card-title>
+        <mat-card-title fxLayoutAlign="center"> <span *ngIf="!isLoading">Bienvenido</span> <span *ngIf="isLoading">Conectando...</span></mat-card-title>
         <mat-card-content fxLayout="column" fxLayoutAlign="center">
             <div><img style="width:25%"src="assets/logo.svg" alt=""></div>
-            <mat-form-field>
+            <mat-form-field *ngIf="!isLoading">
                 <input 
                   type="email" 
                   matInput 
@@ -13,7 +13,7 @@
                   formControlName="email">
                 <mat-error>El email es inválido</mat-error>
             </mat-form-field>
-            <mat-form-field>
+            <mat-form-field *ngIf="!isLoading">
                 <input 
                   type="password" 
                   matInput 
@@ -21,11 +21,15 @@
                   formControlName="password">
                 <mat-error>La contraseña es requerida.</mat-error>            
             </mat-form-field>
+            <span *ngIf="isLoading">&nbsp;</span>
+            <mat-spinner *ngIf="isLoading"  [diameter]="90" fxFlexAlign="center" ></mat-spinner>
+           
         </mat-card-content>
-        <mat-card-actions fxLayout="column" fxLayoutGap="10px"*ngIf="!(isLoading$ | async)">
-            <button  *ngIf="!(isLoading$ | async)" type="submit" mat-raised-button color="primary" [disabled]="loginForm.invalid">Entrar</button>
-            <button  *ngIf="!(isLoading$ | async)" type="button" mat-button >Olvidé contraseña</button>
-            <mat-spinner *ngIf="isLoading$ | async"></mat-spinner>
+        
+        <mat-card-actions fxLayout="column" fxAlignItems="center" fxLayoutGap="10px" *ngIf="!isLoading">
+            <button  type="submit" mat-raised-button color="primary" [disabled]="loginForm.invalid">Entrar</button>
+            <button type="button" mat-button >Olvidé contraseña</button>
+            
         </mat-card-actions>
       </mat-card>
       

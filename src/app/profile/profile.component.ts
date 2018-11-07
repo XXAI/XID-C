@@ -1,7 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppState } from '../app.states';
-import { GetStatus } from '../auth/store/auth.actions';
 
 @Component({
   selector: 'app-profile',
@@ -10,10 +7,10 @@ import { GetStatus } from '../auth/store/auth.actions';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor(private store:Store<AppState>) { }
+  constructor() { }
 
   ngOnInit() {
-    this.store.dispatch(new GetStatus);
+    //this.store.dispatch(new GetStatus);
   }
 
 }

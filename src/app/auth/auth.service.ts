@@ -1,33 +1,63 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { Observable, Subject, of } from 'rxjs';
+
+
+import { User } from './models/user';
+import { map } from 'rxjs/operators';
+
 
 import { environment } from 'src/environments/environment';
-import { User } from './models/user';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
-  constructor(private http: HttpClient) { }
+  authChange = new Subject<boolean>();  
+  constructor(private http: HttpClient, private router: Router) {   }
+  
 
   getToken(): string {
     return localStorage.getItem('token');
   }
 
-  getStatus(): Observable<User> {
-    const url = `${environment.base_url}/status`;
-    return this.http.get<User>(url);
+  isAuth(): boolean {
+    
+    return !!this.getToken();
   }
+
 
   logIn(email: string, password: string):Observable<any> {
-    const url = `${environment.base_url}/login`;
-    return this.http.post<User>(url, { email, password});
+    const url = `${environment.base_url}/signin`;
+    return this.http.post<User>(url, { email, password}).pipe(
+      map( (response) => {
+        if(response.token){
+          localStorage.setItem('token', response.token);
+          this.authChange.next(true);
+        }
+        return response;
+      }
+    ));
   }
 
-  signUp(email:string, password: string) {
-    const url = `${environment.base_url}/register`;
-    return this.http.post<User>(url,{email, password});
+  signUp(payload) {
+    const url = `${environment.base_url}/signup`;
+    return this.http.post<User>(url,payload).pipe(
+      map( (response) => {
+        if(response.token){
+          localStorage.setItem('token', response.token);
+          this.authChange.next(true);
+        }
+        return response;
+      }
+    ));
+  }
+
+  logout() {
+    //this.user = null;
+    localStorage.removeItem('token');
+    this.authChange.next(false);
+    this.router.navigate(['/login']);
   }
 }

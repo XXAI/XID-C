@@ -1,39 +1,39 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { AppState, selectAuthState } from 'src/app/app.states';
-import { LogOut } from 'src/app/auth/store/auth.actions';
-import { Observable } from 'rxjs';
+import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { User } from 'src/app/auth/models/user';
+import { AuthService } from 'src/app/auth/auth.service';
 
 @Component({
   selector: 'app-sidenav-list',
   templateUrl: './sidenav-list.component.html',
   styleUrls: ['./sidenav-list.component.css']
 })
-export class SidenavListComponent implements OnInit {
+export class SidenavListComponent implements OnInit, OnDestroy {
   @Output() onCloseSidenav = new EventEmitter<void>();
 
   isAuthenticated:boolean = false;
   user: User;
 
-  getState: Observable<any>;
+  authSubscription:Subscription;
 
-  constructor(
-    private store: Store<AppState>
-  ) { 
-    this.getState = this.store.select(selectAuthState);
-  }
+  constructor(private authService:AuthService) { }
 
   ngOnInit() {
-    this.getState.subscribe((state)=> {
-      this.isAuthenticated = state.isAuthenticated;
-      this.user = state.user;
-    });
+    this.isAuthenticated = this.authService.isAuth();
+    console.log(this.isAuthenticated);
+    this.authSubscription = this.authService.authChange.subscribe(
+      status => {
+        this.isAuthenticated = status;
+      }
+    );
+  }
+
+  ngOnDestroy(){
+    this.authSubscription.unsubscribe();
   }
   
   logout(){
-    console.log("logout")
-    this.store.dispatch(new LogOut);
+    this.authService.logout();
   }
   
   close(){

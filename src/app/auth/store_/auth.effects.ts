@@ -53,7 +53,7 @@ export class AuthEffects {
         .ofType(AuthActionTypes.SIGNUP)
         .pipe(map( (action: SignUp) => action.payload ))
         .pipe(switchMap( (payload) =>{
-            return this.authService.signUp(payload.email, payload.password)
+            return this.authService.signUp(payload)
                 .pipe(map( (user) => {
                     console.log(user);
                     return new SignUpSuccess({ token: user.token, email: payload.email});
@@ -84,13 +84,13 @@ export class AuthEffects {
             localStorage.removeItem('token');
         })
     );
-
+/*
     @Effect({dispatch: false})
     public GetStatus: Observable<any> = this.actions
     .ofType(AuthActionTypes.GET_STATUS)
     .pipe(switchMap(payload => {
-        return this.authService.getStatus();
-    }));
+       // return this.authService.getStatus();
+    }));*/
 
 }
 

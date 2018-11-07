@@ -2,8 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
 
 import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared/shared.module';
@@ -15,9 +13,8 @@ import { WelcomeComponent } from './welcome/welcome.component';
 
 import { AppComponent } from './app.component';
 import { AuthService } from './auth/auth.service';
-import { AuthEffects } from './auth/store/auth.effects';
 
-import { reducers } from "./app.states";
+
 import { SharedService } from './shared/shared.service';
 import { TokenInterceptor, ErrorInterceptor } from './token.service';
 
@@ -38,8 +35,6 @@ import { TokenInterceptor, ErrorInterceptor } from './token.service';
     HttpClientModule,
     AuthModule,
     SharedModule,
-    StoreModule.forRoot(reducers,{}),
-    EffectsModule.forRoot([AuthEffects]),
     AppRoutingModule
   ],
   providers: [
