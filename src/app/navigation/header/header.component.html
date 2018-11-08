@@ -13,7 +13,6 @@
         <li><a routerLink="/login">Iniciar sesión</a></li>
         </ng-template>
         <ng-template [ngIf]="isAuthenticated">
-          <li><a routerLink="/profile">Perfil</a></li>
           <li><a style="cursor:pointer" (click)="logout()">Cerrar sesión</a></li>
         </ng-template>
         

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
+import { MAT_STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
@@ -7,11 +8,16 @@ import { Observable } from 'rxjs';
 
 import { SharedService } from 'src/app/shared/shared.service';
 import { AuthService } from '../auth.service';
+import { MatStepper } from '@angular/material';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+  styleUrls: ['./signup.component.css'],
+  providers:[{
+    provide: MAT_STEPPER_GLOBAL_OPTIONS,
+    useValue: {showError: true}
+  }]
 })
 export class SignupComponent implements OnInit {
   isLoading:boolean = false;
@@ -29,8 +35,6 @@ export class SignupComponent implements OnInit {
       email: new FormControl('',{ validators: [Validators.required, Validators.email] }),
       password: new FormControl('', { validators: [Validators.required]}),
       password_confirmation: new FormControl('', { validators: [Validators.required, this.validatorPasswordConfirmation] })
-    },{
-      validators: [ this.passwordConfirmation]
     });
 
     this.addressFormGroup = new FormGroup({
@@ -58,18 +62,22 @@ export class SignupComponent implements OnInit {
   
   passwordConfirmation(c: AbstractControl): { [key:string]: boolean } {
     if (c.get('password').value !== c.get('password_confirmation').value) {
-      console.log("pendejo")
+      
         return {"not_confirmed": true};
     }
   }
   validatorPasswordConfirmation(control: AbstractControl): { [key:string]: boolean } {
-    if(control.value !== undefined && control.value !=  ""){
-      return {"not_confirmed": true}
+    if(control.parent != null){
+      if(control.value !== undefined && control.value !=  control.parent.controls["password"].value){
+        return {"not_confirmed": true}
+      }
     }
+    
+    
     return null;
   }
 
-  onSubmit(): void {
+  onSubmit(stepper: MatStepper): void {
     const payload = {
       email: this.userFormGroup.value.email,
       password: this.userFormGroup.value.password,
@@ -94,19 +102,22 @@ export class SignupComponent implements OnInit {
       g_recaptcha_response:'03AMGVjXhPlqMqm4XYdQn-EryDJrZ_cUzcMB88bUhl6ivCncnPf2EOjEx1633tVQ_wU9zTbs0bH43bWHc7s6nH4LKTdXaDQSdV3gOUbf5Lcf8X32EKOueROybuXO1rVLMAjWDv6qCTIuaW8D4Ew3LLOWAOkZ_Gs2o7TTOJ_rQmZLTbB49JjR2KMtFmTMzA_8f4LatfsWkaoTYBrH25Ygyb50JHDq9MEGoxdA5WB1WTbve_u-9imfoMe0aufCxuQRyCPf0INFIHd5fMeqRFhdCdOphNu84uc-sgj4VFaWzDre8YdfKfw5ghYLZEV_MUow3wtJr-euto2cV_C-S_HUG_UokoIENxOuWlAg'
 
     }
+
+    this.isLoading = true;
     this.authService.signUp(payload).subscribe(
       response => {
         this.isLoading = false;
         this.router.navigate(['/profile']);
       }, error => {
-
-        console.log(error);
-        var errorMessage = "Error de validación, verifique los campos marcados en rojo";
+       
+        var errorMessage = "Error de validación, verifique los campos marcados en rojo.";
         if(error.status == 409){
           this.userFormGroup.controls['email'].setErrors({'unique':true})
-          console.log(this.userFormGroup.controls['email'].errors);
+          stepper.previous();
+          stepper.next();
+          
         } else {
-          errorMessage = "Ocurrió un error";
+          errorMessage = "Ocurrió un error.";
         }
         this.sharedService.showSnackBar(errorMessage, null, 3000);
         this.isLoading = false;

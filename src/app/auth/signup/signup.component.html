@@ -2,14 +2,14 @@
   <div class="mat-typography">
     <h1 class="headline" style="text-align:center">Registro</h1>
   </div>
-  <mat-horizontal-stepper [linear]="true" #stepper>
-    <mat-step [stepControl]="userFormGroup">
+  <mat-horizontal-stepper  #stepper>
+    <mat-step [stepControl]="userFormGroup" errorMessage="Verificar datos">
       <form [formGroup]="userFormGroup">
         <ng-template matStepLabel>Usuario</ng-template>
         <section fxLayout="column">
           <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
             <mat-form-field fxFlex>
-              <input type="text" matInput placeholder="Nombre" formControlName="nombre">
+              <input type="text" matInput placeholder="Nombre" formControlName="nombre"> 
               <mat-error>El nombre es obligatorio</mat-error>
             </mat-form-field>
             <mat-form-field fxFlex>
@@ -44,7 +44,7 @@
 
       </form>
     </mat-step>
-    <mat-step [stepControl]="addressFormGroup">
+    <mat-step [stepControl]="addressFormGroup" errorMessage="Verificar datos">
       <form [formGroup]="addressFormGroup">
         <ng-template matStepLabel>Domicilio</ng-template>
         <section fxLayout="column">
@@ -130,10 +130,11 @@
           <mat-checkbox formControlName="informacion_veridica">Manifiesto que la información presentada es verídica.</mat-checkbox>
           <mat-checkbox formControlName="acepto">Acepto los términos y condiciones de uso.</mat-checkbox>
           <br>
-          <div fxLayout>
+          <mat-spinner *ngIf="isLoading"  [diameter]="60" fxFlexAlign="center" ></mat-spinner>
+          <div fxLayout *ngIf="!isLoading">
               <button mat-button matStepperPrevious>Atrás</button>
               <div fxFlex></div>
-              <button mat-raised-button color="accent" (click)="onSubmit()" [disabled]="userFormGroup.invalid || addressFormGroup.invalid || identityFormGroup.invalid">Finalizar</button>
+              <button mat-raised-button color="accent" (click)="onSubmit(stepper)" [disabled]="userFormGroup.invalid || addressFormGroup.invalid || identityFormGroup.invalid">Finalizar</button>
             </div>
         </section>
       </form>

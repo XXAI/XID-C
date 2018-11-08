@@ -15,15 +15,9 @@
     </a>
   </ng-template>
   <ng-template [ngIf]="isAuthenticated">
-    <a mat-list-item routerLink="/profile" (click)="close()">
-      <mat-icon>account_circle</mat-icon>
-      <span class="nav-caption">Perfil</span>
+    <a mat-list-item  (click)="logout()">
+      <mat-icon>exit_to_app</mat-icon>
+      <span class="nav-caption">Cerrar sesión</span>
     </a>
-    <mat-list-item>
-      <button mat-icon-button (click)="logout()">
-        <mat-icon>exit_to_app</mat-icon>
-        <span class="nav-caption">Cerrar sesión</span>
-      </button>
-    </mat-list-item>
   </ng-template>
 </mat-nav-list>
