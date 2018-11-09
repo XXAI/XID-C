@@ -60,20 +60,12 @@ export class SignupComponent implements OnInit {
 
   }
   
-  passwordConfirmation(c: AbstractControl): { [key:string]: boolean } {
-    if (c.get('password').value !== c.get('password_confirmation').value) {
-      
-        return {"not_confirmed": true};
-    }
-  }
   validatorPasswordConfirmation(control: AbstractControl): { [key:string]: boolean } {
     if(control.parent != null){
       if(control.value !== undefined && control.value !=  control.parent.controls["password"].value){
         return {"not_confirmed": true}
       }
     }
-    
-    
     return null;
   }
 

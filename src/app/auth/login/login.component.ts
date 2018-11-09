@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { SharedService } from 'src/app/shared/shared.service';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';

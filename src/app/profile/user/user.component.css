@@ -1,0 +1,7 @@
+.user {
+    padding:30px
+}
+.avatar {
+    background-image: url(../../../assets/logo.svg);
+  background-size: cover;
+}

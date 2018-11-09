@@ -18,6 +18,7 @@ import { AuthService } from './auth/auth.service';
 import { SharedService } from './shared/shared.service';
 import { TokenInterceptor, ErrorInterceptor } from './token.service';
 import { MAT_STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 
 
@@ -28,7 +29,8 @@ import { MAT_STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
     AppComponent,
     HeaderComponent,
     SidenavListComponent,
-    WelcomeComponent
+    WelcomeComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,

@@ -54,6 +54,24 @@ export class AuthService {
     ));
   }
 
+  forgotPassword(email: string):Observable<any> {
+    const url = `${environment.base_url}/forgot-password`;
+    return this.http.post<any>(url, { email });
+  }
+
+  resetPassword(email:string, password: string, token: string):Observable<any> {
+    const url = `${environment.base_url}/reset-password`;
+    return this.http.post<any>(url, {email, password, token}).pipe(
+      map( (response) => {
+        if(response.token){
+          localStorage.setItem('token', response.token);
+          this.authChange.next(true);
+        }
+        return response;
+      }
+    ));
+  }
+
   logout() {
     //this.user = null;
     localStorage.removeItem('token');

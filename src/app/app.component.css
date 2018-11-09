@@ -5,3 +5,10 @@ mat-sidenav-container, mat-sidenav-content, mat-sidenav {
 mat-sidenav {
     width: 250px;
 }
+
+
+:host{
+    box-sizing: border-box;
+    display: block;
+    height: 100%;
+  }

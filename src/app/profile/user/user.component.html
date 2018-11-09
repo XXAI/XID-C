@@ -1,0 +1,41 @@
+<section class="user" fxLayout fxLayoutAlign="center">
+  <form (ngSubmit)="startTraining(f)" #f="ngForm">
+    <mat-card fxFlex.xs="100%" fxFlex="400px">
+      <mat-card-title>Datos de tu cuenta</mat-card-title>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item>
+            <div matLine fxLayout="row" fxLayout.xs="column" style="width:100%" fxLayoutAlign="center center"
+              fxLayoutAlign.xs="center start">
+              <small>Nombre</small>
+              <span fxFlex></span>
+              <span>Nombre Patenro Materno</span>
+            </div>
+          </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item>
+              <div matLine fxLayout="row" fxLayout.xs="column" style="width:100%" fxLayoutAlign="center center"
+                fxLayoutAlign.xs="center start">
+                <small>Email</small>
+                <span fxFlex></span>
+                <span>hola@hola.com</span>
+              </div>
+            </mat-list-item>
+          <mat-divider></mat-divider>
+          <mat-list-item>
+            <div matLine fxLayout="row" style="width:100%" fxLayoutAlign="center center">
+              <small>Contraseña</small>
+              <span fxFlex></span>
+              <button mat-button>
+                <mat-icon>edit</mat-icon> Cambiar
+              </button>
+            </div>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+      <mat-card-actions fxLayoutAlign="end" *ngIf="!(isLoading$ | async)">
+        <button mat-button>Editar cuenta</button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</section>
