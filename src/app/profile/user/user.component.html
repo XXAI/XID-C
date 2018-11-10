@@ -1,40 +1,115 @@
 <section class="user" fxLayout fxLayoutAlign="center">
-  <form (ngSubmit)="startTraining(f)" #f="ngForm">
+
+  <mat-card fxFlex.xs="100%" fxFlex="400px" *ngIf="!editingPassword && !editingAccount">
+    <mat-card-title>Cuenta</mat-card-title>
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item>
+          <div matLine fxLayout="row" fxLayout.xs="column" style="width:100%" fxLayoutAlign="center center"
+            fxLayoutAlign.xs="center start">
+            <small>Nombre</small>
+            <span fxFlex></span>
+            <span>{{ profile.nombre }} {{ profile.apellido_paterno }} {{ profile.apellido_materno }}</span>
+          </div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <div matLine fxLayout="row" fxLayout.xs="column" style="width:100%" fxLayoutAlign="center center"
+            fxLayoutAlign.xs="center start">
+            <small>Email</small>
+            <span fxFlex></span>
+            <span>{{ profile.email }}</span>
+          </div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <div matLine fxLayout="row" style="width:100%" fxLayoutAlign="center center">
+            <small>Contraseña</small>
+            <span fxFlex></span>
+            <button mat-button (click)="editingPassword = true;" [disabled]="!profile.id">
+              <mat-icon>edit</mat-icon> Cambiar
+            </button>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+    <mat-card-actions fxLayoutAlign="end">
+      <button mat-button (click)="editingAccount = true;" [disabled]="!profile.id">Editar cuenta</button>
+    </mat-card-actions>
+  </mat-card>
+
+  <form fxLayout fxLayoutAlign="center center" *ngIf="editingPassword" [formGroup]="passwordFormGroup" fxFlex="100"
+    (ngSubmit)="onSubmitPasswordForm()">
     <mat-card fxFlex.xs="100%" fxFlex="400px">
-      <mat-card-title>Datos de tu cuenta</mat-card-title>
-      <mat-card-content>
-        <mat-list>
-          <mat-list-item>
-            <div matLine fxLayout="row" fxLayout.xs="column" style="width:100%" fxLayoutAlign="center center"
-              fxLayoutAlign.xs="center start">
-              <small>Nombre</small>
-              <span fxFlex></span>
-              <span>Nombre Patenro Materno</span>
-            </div>
-          </mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item>
-              <div matLine fxLayout="row" fxLayout.xs="column" style="width:100%" fxLayoutAlign="center center"
-                fxLayoutAlign.xs="center start">
-                <small>Email</small>
-                <span fxFlex></span>
-                <span>hola@hola.com</span>
-              </div>
-            </mat-list-item>
-          <mat-divider></mat-divider>
-          <mat-list-item>
-            <div matLine fxLayout="row" style="width:100%" fxLayoutAlign="center center">
-              <small>Contraseña</small>
-              <span fxFlex></span>
-              <button mat-button>
-                <mat-icon>edit</mat-icon> Cambiar
-              </button>
-            </div>
-          </mat-list-item>
-        </mat-list>
+      <mat-card-title fxLayoutAlign="center">Cambiar contraseña</mat-card-title>
+      <mat-card-content fxLayout="column" fxLayoutAlign="center">
+
+        <mat-form-field *ngIf="!isLoading && !sended">
+          <input type="password" matInput placeholder="Contraseña actual" formControlName="current_password">
+          <mat-error>La contraseña es requerida.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="!isLoading && !sended">
+          <input type="password" matInput placeholder="Nueva contraseña" formControlName="new_password">
+          <mat-error *ngIf="passwordFormGroup.controls['new_password']?.errors?.required">Debes ingresar la nueva
+            contraseña.</mat-error>
+          <mat-error *ngIf="passwordFormGroup.controls['new_password']?.errors?.old_password">La nueva contraseña y la
+            anterior deben ser diferentes.</mat-error>
+        </mat-form-field>
+        <mat-form-field *ngIf="!isLoading && !sended">
+          <input type="password" matInput placeholder="Confirmar contraseña" formControlName="password_confirmation">
+          <mat-error *ngIf="passwordFormGroup.controls['password_confirmation']?.errors?.required">Debes confirmar la
+            nueva
+            contraseña.</mat-error>
+          <mat-error *ngIf="passwordFormGroup.controls['password_confirmation']?.errors?.not_confirmed">Las contraseñas
+            no
+            coinciden.</mat-error>
+        </mat-form-field>
+        <section class="mat-typography" *ngIf="sended">
+          <h2>Tu contraseña ha cambiado.</h2>
+          <p>¡No la olvides esta vez!</p>
+        </section>
+        <span *ngIf="isLoading">&nbsp;</span>
+        <mat-spinner *ngIf="isLoading" [diameter]="90" fxFlexAlign="center"></mat-spinner>
       </mat-card-content>
-      <mat-card-actions fxLayoutAlign="end" *ngIf="!(isLoading$ | async)">
-        <button mat-button>Editar cuenta</button>
+
+      <mat-card-actions fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px" *ngIf="!isLoading">
+        <button mat-button type="button" (click)="editingPassword = false;">Cancelar</button>
+        <button type="submit" mat-raised-button color="primary" [disabled]="passwordFormGroup.invalid">Aceptar</button>
+
+      </mat-card-actions>
+    </mat-card>
+  </form>
+
+  <form fxLayout fxLayoutAlign="center center" *ngIf="editingAccount" [formGroup]="accountFormGroup" fxFlex="100"
+    (ngSubmit)="onSubmitAccountForm()">
+    <mat-card fxFlex.xs="100%" fxFlex="400px">
+      <mat-card-title fxLayoutAlign="center">Editar cuenta</mat-card-title>
+      <mat-card-content fxLayout="column" fxLayoutAlign="center">
+        <mat-form-field fxFlex>
+          <input type="text" matInput placeholder="Nombre" formControlName="nombre">
+          <mat-error>El nombre es obligatorio</mat-error>
+        </mat-form-field>
+        <mat-form-field fxFlex>
+          <input type="text" matInput placeholder="Apellido paterno" formControlName="apellido_paterno">
+          <mat-error>El apellido paterno es obligatorio</mat-error>
+        </mat-form-field>
+        <mat-form-field fxFlex>
+          <input type="text" matInput placeholder="Apellido materno" formControlName="apellido_materno">
+          <mat-error>Error</mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <input type="email" matInput placeholder="Email" formControlName="email">
+          <mat-error *ngIf="accountFormGroup.controls['email']?.errors?.required">El email es inválido</mat-error>
+          <mat-error *ngIf="accountFormGroup.controls['email']?.errors?.unique">El email ya fue utilizado</mat-error>
+        </mat-form-field>
+        <span *ngIf="isLoading">&nbsp;</span>
+        <mat-spinner *ngIf="isLoading" [diameter]="90" fxFlexAlign="center"></mat-spinner>
+      </mat-card-content>
+
+      <mat-card-actions fxLayout="row" fxLayoutAlign="end" fxLayoutGap="10px" *ngIf="!isLoading">
+        <button mat-button type="button" (click)="editingAccount = false;">Cancelar</button>
+        <button type="submit" mat-raised-button color="primary" [disabled]="accountFormGroup.invalid">Guardar</button>
       </mat-card-actions>
     </mat-card>
   </form>

@@ -23,8 +23,6 @@ export class ResetPasswordComponent implements OnInit {
       password: new FormControl('', { validators: [Validators.required]}),
       password_confirmation: new FormControl('', { validators: [Validators.required, this.validatorPasswordConfirmation] })
     });
-
-    console.log(this.activatedRoute.snapshot.queryParamMap);
     this.email = this.activatedRoute.snapshot.queryParamMap.get("e");
     this.token = this.activatedRoute.snapshot.queryParamMap.get("token");
 

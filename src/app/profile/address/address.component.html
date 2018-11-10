@@ -1,3 +1,18 @@
-<p>
-  address works!
-</p>
+<section class="address" fxLayout fxLayoutAlign="center">
+  <mat-card fxFlex.xs="100%" fxFlex="400px">
+    <mat-card-title>Domicilio</mat-card-title>
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item>
+          <p>
+            {{ profile.calle }} {{ profile.numero_exterior }} {{ profile.numero_interior }} {{ profile.colonia }} C.P.
+            {{ profile.codigo_postal }}, {{ profile.municipio }}, {{ profile.estado }}, {{ profile.pais }}.
+          </p>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+    <mat-card-actions fxLayoutAlign="end">
+      <button mat-button [disabled]="!profile.id">Editar información</button>
+    </mat-card-actions>
+  </mat-card>
+</section>

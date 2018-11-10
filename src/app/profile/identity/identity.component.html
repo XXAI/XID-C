@@ -1,3 +1,55 @@
-<p>
-  identity works!
-</p>
+<section class="identity" fxLayout fxLayoutAlign="center">
+  <mat-card fxFlex.xs="100%" fxFlex="400px">
+    <mat-card-title>Identidad</mat-card-title>
+    <mat-card-content>
+      <div class="mat-typography">
+        <br>
+        <p>Algunos servicios en línea del Instituto de Salud del Estado de Chiapas necesitan que la cuenta de Salud ID
+          esté verificada para confiar en la identidad del usuario. Los datos siguientes no son obligatorios, pero una
+          vez creada la cuenta es recomendable iniciar el proceso de verificación.</p>
+        <br>
+      </div>
+      <mat-list>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <div matLine fxLayout="row" fxLayout.xs="column" style="width:100%" fxLayoutAlign="center center"
+            fxLayoutAlign.xs="center start">
+            <small>Nacionalidad</small>
+            <span fxFlex></span>
+            <span>{{ profile.nacionalidad == "M" ? 'Mexicana' : 'Extranjera' }}</span>
+          </div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <div matLine fxLayout="row" fxLayout.xs="column" style="width:100%" fxLayoutAlign="center center"
+            fxLayoutAlign.xs="center start">
+            <small>CURP</small>
+            <span fxFlex></span>
+            <span>{{ profile.curp }}</span>
+          </div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <div matLine fxLayout="row" fxLayout.xs="column" style="width:100%" fxLayoutAlign="center center"
+            fxLayoutAlign.xs="center start">
+            <small>R.F.C.</small>
+            <span fxFlex></span>
+            <span>{{ profile.rfc }}</span>
+          </div>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+          <div matLine fxLayout="row" fxLayout.xs="column" style="width:100%" fxLayoutAlign="center center"
+            fxLayoutAlign.xs="center start">
+            <small>INE</small>
+            <span fxFlex></span>
+            <span>{{ profile.clave_elector }}</span>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+    <mat-card-actions fxLayoutAlign="end">
+      <button mat-button [disabled]="!profile.id">Editar información</button>
+    </mat-card-actions>
+  </mat-card>
+</section>

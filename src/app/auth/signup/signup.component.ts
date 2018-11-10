@@ -53,7 +53,7 @@ export class SignupComponent implements OnInit {
       nacionalidad: new FormControl('M',{ }),
       curp: new FormControl('',{ }),
       rfc: new FormControl('',{ }),
-      ine: new FormControl('',{ }),
+      clave_elector: new FormControl('',{ }),
       informacion_veridica: new FormControl(false, { validators: [Validators.pattern('true')] }),
       acepto: new FormControl(false, { validators: [Validators.pattern('true')] })
     });
@@ -88,7 +88,7 @@ export class SignupComponent implements OnInit {
       nacionalidad: this.identityFormGroup.value.nacionalidad,
       curp: this.identityFormGroup.value.curp,
       rfc: this.identityFormGroup.value.rfc,
-      ine: this.identityFormGroup.value.ine,
+      clave_elector: this.identityFormGroup.value.clave_elector,
       acepto: this.identityFormGroup.value.acepto,
       informacion_veridica: this.identityFormGroup.value.informacion_veridica,
       g_recaptcha_response:'03AMGVjXhPlqMqm4XYdQn-EryDJrZ_cUzcMB88bUhl6ivCncnPf2EOjEx1633tVQ_wU9zTbs0bH43bWHc7s6nH4LKTdXaDQSdV3gOUbf5Lcf8X32EKOueROybuXO1rVLMAjWDv6qCTIuaW8D4Ew3LLOWAOkZ_Gs2o7TTOJ_rQmZLTbB49JjR2KMtFmTMzA_8f4LatfsWkaoTYBrH25Ygyb50JHDq9MEGoxdA5WB1WTbve_u-9imfoMe0aufCxuQRyCPf0INFIHd5fMeqRFhdCdOphNu84uc-sgj4VFaWzDre8YdfKfw5ghYLZEV_MUow3wtJr-euto2cV_C-S_HUG_UokoIENxOuWlAg'
